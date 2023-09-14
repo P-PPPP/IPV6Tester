@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<header>
+  <script src="./ping.js"></script>
+  <link rel="manifest" href="manifest.json" />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css"
+    integrity="sha384-cLRrMq39HOZdvE0j6yBojO4+1PrHfB7a9l5qLcmRm/fiWXYY+CndJPmyu5FV/9Tw"
+    crossorigin="anonymous"
+  />
+  <script
+    src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"
+    integrity="sha384-gCMZcshYKOGRX9r6wbDrvF+TcCCswSHFucUzUPwka+Gr+uHgjlYvkABr95TCOz3A"
+    crossorigin="anonymous"
+  ></script>
+</header>
+<body style="margin: auto;width: 80%;">
+  <h1>IPV6 Tester</h1>
+    <div class="mdui-card">
+      <div class="mdui-card-primary">
+        <div class="mdui-card-primary-title" id="Stage1-tit">Stage1</div>
+        <div class="mdui-card-primary-subtitle" id="Stage1-Lat">-1 ms</div>
+      </div>
+     </div>
+
+     <div class="mdui-card">
+      <div class="mdui-card-primary">
+        <div class="mdui-card-primary-title" id="Stage2-tit">Stage2</div>
+        <div class="mdui-card-primary-subtitle" id="Stage2-Lat">-1 ms</div>
+      </div>
+     </div>
+
+     <div id="log" style="margin-top: 3rem;"></div>
+    </body>
+<script>
+    PingStatus = {"Stage1":-1,"Stage2":-1}
+    function PPing(dest,target){
+      ping(dest).then(function(delta) {
+            console.log('Ping time was ' + String(delta) + ' ms');
+            PingStatus[target] = delta;
+            document.getElementById(target+'-Lat').innerHTML = delta + " ms";
+            document.getElementById(target+'-tit').innerHTML = target + " " + '<i class="mdui-icon material-icons">done</i>';
+        }).catch(function(err) {
+            console.error('Could not ping remote URL', err);
+            PingStatus[target] = -1;
+            document.getElementById(target+'-Lat').innerHTML = "-1 ms";
+        });
+      }
+      function StartProgress(){
+        PPing("http://[2001:da8:a005::144]","Stage1");
+        PPing("http://6.ipw.cn/","Stage2")
+        document.getElementById("log").innerText += datdddde() + "Tried \n";
+      }
+      function datdddde(){
+        var newDate = new Date(); 
+        return newDate.toTimeString();
+      }
+      setInterval(() => {StartProgress()}, 4000);
+
+</script>
+</html>

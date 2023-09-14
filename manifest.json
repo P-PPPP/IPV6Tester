@@ -1,0 +1,13 @@
+{
+    "name": "IPV6 Tester",
+    "icons": [
+      {
+        "src": "123123.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "./index.html",
+    "display": "standalone"
+  }
+  
