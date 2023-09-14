@@ -1,9 +1,8 @@
 <!doctype html>
 <html lang="en">
 <header>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script src="./ping.js"></script>
-  <link rel="manifest" href="manifest.json" />
+  <link rel="manifest" href="./manifest.json" />
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css"
@@ -16,32 +15,28 @@
     crossorigin="anonymous"
   ></script>
 </header>
-<body style="margin: auto;width: 80%;">
+<body style="margin: auto;width: 80%;" onload="Init()">
   <h1>IPV6 Tester</h1>
-    <div class="mdui-card">
-      <div class="mdui-card-primary">
-        <div class="mdui-card-primary-title" id="Stage1-tit">Stage1</div>
-        <div class="mdui-card-primary-subtitle" id="Stage1-Lat">-1 ms</div>
-      </div>
-     </div>
-
-     <div class="mdui-card">
-      <div class="mdui-card-primary">
-        <div class="mdui-card-primary-title" id="Stage2-tit">Stage2</div>
-        <div class="mdui-card-primary-subtitle" id="Stage2-Lat">-1 ms</div>
-      </div>
-     </div>
-
-     <div id="log" style="margin-top: 3rem;"></div>
+    <div id="main"></div>
+    <div><p>说明</p><p>只要能够连接公网IPV6即可链接互联网</p><p>故障排除</p><p>对于两者都未能连接的情况，则说明未DHCP得到IPV6地址，对于教学楼和图书馆而言是正常的，但在寝室请尝试重连获取IPV6</p><p>对于可以Ping通校内而无法访问公网的用户可等待数刻，由于教育网IPV6属于单向局域网，可能网络出口拥挤，可尝试访问<a href="http://[2402:f000:1:404:166:111:4:100]">清华大学IPV6网址</a></p><p>对于Windows用户，如果你不想产生IPV4流量，可以尝试<a href="http://hljedi.com/content/545.html">参考这篇文章（文章里是V6,操作时关闭V4即可）</a>关闭IPV4协议（这可能引起DNS解析错误）</p></div>
+    <p>Ping记录</p>
+    <div id="log" style="margin-top: 3rem;"></div>
     </body>
 <script>
     PingStatus = {"Stage1":-1,"Stage2":-1}
+
+    function addNewBlock(target,des){
+        document.getElementById("main").innerHTML += `<div class="mdui-card" id="${target}-card"><div class="mdui-card-primary"><div class="mdui-card-primary-title" id="${target}-tit">${des}</div><div class="mdui-card-primary-subtitle" id="${target}-Lat">-1 ms</div></div></div>
+        `;
+    }
+
     function PPing(dest,target){
       ping(dest).then(function(delta) {
             console.log('Ping time was ' + String(delta) + ' ms');
             PingStatus[target] = delta;
             document.getElementById(target+'-Lat').innerHTML = delta + " ms";
-            document.getElementById(target+'-tit').innerHTML = target + " " + '<i class="mdui-icon material-icons">done</i>';
+            document.getElementById(target+'-tit').innerHTML = '<i class="mdui-icon material-icons">done</i>';
+            document.getElementById(target+'-card').style.backgroundColor = "#95EE6B";
         }).catch(function(err) {
             console.error('Could not ping remote URL', err);
             PingStatus[target] = -1;
@@ -52,6 +47,9 @@
         PPing("http://[2001:da8:a005::144]","Stage1");
         PPing("http://6.ipw.cn/","Stage2")
         document.getElementById("log").innerText += datdddde() + "Tried \n";
+      }
+      function Init(){
+        addNewBlock("Stage1","校内IPV6连通性"); addNewBlock("Stage2","公网IPV6连通性");
       }
       function datdddde(){
         var newDate = new Date(); 
